@@ -34,7 +34,7 @@ public class SpectreDataStore {
     Calendar updated = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 
     switch (id) {
-    case 1: updated.set(2015, 11, 9); data = createProduct(1, "Golf", 1, 2, 14000, 50000, 3, 3, updated); break;
+    case 1: updated.set(2015, 11, 9); data = createProduct(1, "Golf", 1, 2, 14000, 55000, 3, 3, updated); break;
     case 2: updated.set(2015, 11, 9); data = createProduct(2, "Golf GTE", 1, 2, 21000, 30000, 2, 5, updated); break;
     case 3: updated.set(2015, 11, 9); data = createProduct(3, "Passat", 1, 3, 17000, 60000, 2, 2, updated); break;
     case 4: updated.set(2015, 11, 9); data = createProduct(4, "Passat GTE", 1, 3, 23000, 35000, 1, 5, updated); break;
