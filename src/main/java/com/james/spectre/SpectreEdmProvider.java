@@ -51,23 +51,28 @@ import org.apache.olingo.odata2.api.exception.ODataException;
 
 public class SpectreEdmProvider extends EdmProvider {
 
-  static final String ENTITY_SET_NAME_MANUFACTURERS = "Suppliers";
-  static final String ENTITY_SET_NAME_CARS = "Products";
-  static final String ENTITY_NAME_MANUFACTURER = "Supplier";
-  static final String ENTITY_NAME_CAR = "Product";
+  static final String ENTITY_SET_NAME_CATEGORIES = "Categories";	
+  static final String ENTITY_SET_NAME_SUPPLIERS = "Suppliers";
+  static final String ENTITY_SET_NAME_PRODUCTS = "Products";
+  static final String ENTITY_NAME_SUPPLIER = "Supplier";
+  static final String ENTITY_NAME_CATEGORY = "Category";
+  static final String ENTITY_NAME_PRODUCT = "Product";
 
   private static final String NAMESPACE = "org.apache.olingo.odata2.ODataProducts";
 
-  private static final FullQualifiedName ENTITY_TYPE_1_1 = new FullQualifiedName(NAMESPACE, ENTITY_NAME_CAR);
-  private static final FullQualifiedName ENTITY_TYPE_1_2 = new FullQualifiedName(NAMESPACE, ENTITY_NAME_MANUFACTURER);
+  private static final FullQualifiedName ENTITY_TYPE_1_1 = new FullQualifiedName(NAMESPACE, ENTITY_NAME_PRODUCT);
+  private static final FullQualifiedName ENTITY_TYPE_1_2 = new FullQualifiedName(NAMESPACE, ENTITY_NAME_SUPPLIER);
+  private static final FullQualifiedName ENTITY_TYPE_1_3 = new FullQualifiedName(NAMESPACE, ENTITY_NAME_CATEGORY);
 
   private static final FullQualifiedName COMPLEX_TYPE = new FullQualifiedName(NAMESPACE, "Address");
 
-  private static final FullQualifiedName ASSOCIATION_CAR_MANUFACTURER = new FullQualifiedName(NAMESPACE,
-      "Product_Supplier_Supplier_Products");
+  private static final FullQualifiedName ASSOCIATION_PRODUCT_SUPPLIER = new FullQualifiedName(NAMESPACE, "Product_Supplier_Supplier_Products");
+  private static final FullQualifiedName ASSOCIATION_PRODUCT_CATEGORY = new FullQualifiedName(NAMESPACE, "Product_Category_Category_Products");
 
-  private static final String ROLE_1_1 = "Product_Supplier";
-  private static final String ROLE_1_2 = "Supplier_Products";
+  private static final String ROLE_1_2 = "Product_Supplier";
+  private static final String ROLE_2_1 = "Supplier_Products";
+  private static final String ROLE_1_3 = "Product_Category";
+  private static final String ROLE_3_1 = "Supplier_Products";
 
   private static final String ENTITY_CONTAINER = "ODataProductsEntityContainer";
 
@@ -85,6 +90,7 @@ public class SpectreEdmProvider extends EdmProvider {
     List<EntityType> entityTypes = new ArrayList<EntityType>();
     entityTypes.add(getEntityType(ENTITY_TYPE_1_1));
     entityTypes.add(getEntityType(ENTITY_TYPE_1_2));
+    entityTypes.add(getEntityType(ENTITY_TYPE_1_3));
     schema.setEntityTypes(entityTypes);
 
     List<ComplexType> complexTypes = new ArrayList<ComplexType>();
@@ -92,7 +98,8 @@ public class SpectreEdmProvider extends EdmProvider {
     schema.setComplexTypes(complexTypes);
 
     List<Association> associations = new ArrayList<Association>();
-    associations.add(getAssociation(ASSOCIATION_CAR_MANUFACTURER));
+    associations.add(getAssociation(ASSOCIATION_PRODUCT_SUPPLIER));
+    associations.add(getAssociation(ASSOCIATION_PRODUCT_CATEGORY));
     schema.setAssociations(associations);
 
     List<EntityContainer> entityContainers = new ArrayList<EntityContainer>();
@@ -100,13 +107,14 @@ public class SpectreEdmProvider extends EdmProvider {
     entityContainer.setName(ENTITY_CONTAINER).setDefaultEntityContainer(true);
 
     List<EntitySet> entitySets = new ArrayList<EntitySet>();
-    entitySets.add(getEntitySet(ENTITY_CONTAINER, ENTITY_SET_NAME_CARS));
-    entitySets.add(getEntitySet(ENTITY_CONTAINER, ENTITY_SET_NAME_MANUFACTURERS));
+    entitySets.add(getEntitySet(ENTITY_CONTAINER, ENTITY_SET_NAME_PRODUCTS));
+    entitySets.add(getEntitySet(ENTITY_CONTAINER, ENTITY_SET_NAME_SUPPLIERS));
+    entitySets.add(getEntitySet(ENTITY_CONTAINER, ENTITY_SET_NAME_CATEGORIES));
     entityContainer.setEntitySets(entitySets);
 
     List<AssociationSet> associationSets = new ArrayList<AssociationSet>();
-    associationSets.add(getAssociationSet(ENTITY_CONTAINER, ASSOCIATION_CAR_MANUFACTURER,
-        ENTITY_SET_NAME_MANUFACTURERS, ROLE_1_2));
+    associationSets.add(getAssociationSet(ENTITY_CONTAINER, ASSOCIATION_PRODUCT_SUPPLIER, ENTITY_SET_NAME_SUPPLIERS, ROLE_2_1));
+    associationSets.add(getAssociationSet(ENTITY_CONTAINER, ASSOCIATION_PRODUCT_CATEGORY, ENTITY_SET_NAME_CATEGORIES, ROLE_3_1));
     entityContainer.setAssociationSets(associationSets);
 
     List<FunctionImport> functionImports = new ArrayList<FunctionImport>();
@@ -131,26 +139,27 @@ public class SpectreEdmProvider extends EdmProvider {
         List<Property> properties = new ArrayList<Property>();
         properties.add(new SimpleProperty().setName("Id").setType(EdmSimpleTypeKind.Int32).setFacets(
             new Facets().setNullable(false)));
-        properties.add(new SimpleProperty().setName("Model").setType(EdmSimpleTypeKind.String).setFacets(
+        properties.add(new SimpleProperty().setName("Name").setType(EdmSimpleTypeKind.String).setFacets(
             new Facets().setNullable(false).setMaxLength(100).setDefaultValue("Hugo"))
             .setCustomizableFeedMappings(
                 new CustomizableFeedMappings().setFcTargetPath(EdmTargetPath.SYNDICATION_TITLE)));
         properties.add(new SimpleProperty().setName("SupplierId").setType(EdmSimpleTypeKind.Int32));
-        properties.add(new SimpleProperty().setName("Price").setType(EdmSimpleTypeKind.Decimal));
-        properties.add(new SimpleProperty().setName("Currency").setType(EdmSimpleTypeKind.String).setFacets(
-            new Facets().setMaxLength(3)));
-        properties.add(new SimpleProperty().setName("ModelYear").setType(EdmSimpleTypeKind.String).setFacets(
-            new Facets().setMaxLength(4)));
+        properties.add(new SimpleProperty().setName("CategoryId").setType(EdmSimpleTypeKind.Int32));
+        properties.add(new SimpleProperty().setName("ProductionUsage").setType(EdmSimpleTypeKind.Int32));
+        properties.add(new SimpleProperty().setName("ConsumptionUsage").setType(EdmSimpleTypeKind.Int32));
+        properties.add(new SimpleProperty().setName("ProductionRating").setType(EdmSimpleTypeKind.Int32));
+        properties.add(new SimpleProperty().setName("ConsumptionRating").setType(EdmSimpleTypeKind.Int32));
         properties.add(new SimpleProperty().setName("Updated").setType(EdmSimpleTypeKind.DateTime)
             .setFacets(new Facets().setNullable(false).setConcurrencyMode(EdmConcurrencyMode.Fixed))
             .setCustomizableFeedMappings(
                 new CustomizableFeedMappings().setFcTargetPath(EdmTargetPath.SYNDICATION_UPDATED)));
-        properties.add(new SimpleProperty().setName("ImagePath").setType(EdmSimpleTypeKind.String));
 
         // Navigation Properties
         List<NavigationProperty> navigationProperties = new ArrayList<NavigationProperty>();
         navigationProperties.add(new NavigationProperty().setName("Supplier")
-            .setRelationship(ASSOCIATION_CAR_MANUFACTURER).setFromRole(ROLE_1_1).setToRole(ROLE_1_2));
+            .setRelationship(ASSOCIATION_PRODUCT_SUPPLIER).setFromRole(ROLE_1_2).setToRole(ROLE_2_1));
+        navigationProperties.add(new NavigationProperty().setName("Category")
+            .setRelationship(ASSOCIATION_PRODUCT_CATEGORY).setFromRole(ROLE_1_3).setToRole(ROLE_3_1));
 
         // Key
         List<PropertyRef> keyProperties = new ArrayList<PropertyRef>();
@@ -181,7 +190,7 @@ public class SpectreEdmProvider extends EdmProvider {
         // Navigation Properties
         List<NavigationProperty> navigationProperties = new ArrayList<NavigationProperty>();
         navigationProperties.add(new NavigationProperty().setName("Products")
-            .setRelationship(ASSOCIATION_CAR_MANUFACTURER).setFromRole(ROLE_1_2).setToRole(ROLE_1_1));
+            .setRelationship(ASSOCIATION_PRODUCT_SUPPLIER).setFromRole(ROLE_2_1).setToRole(ROLE_1_2));
 
         // Key
         List<PropertyRef> keyProperties = new ArrayList<PropertyRef>();
@@ -193,8 +202,37 @@ public class SpectreEdmProvider extends EdmProvider {
             .setKey(key)
             .setNavigationProperties(navigationProperties);
 
-      }
-    }
+      } else if (ENTITY_TYPE_1_3.getName().equals(edmFQName.getName())) {
+
+          // Properties
+          List<Property> properties = new ArrayList<Property>();
+          properties.add(new SimpleProperty().setName("Id").setType(EdmSimpleTypeKind.Int32).setFacets(
+              new Facets().setNullable(false)));
+          properties.add(new SimpleProperty().setName("Name").setType(EdmSimpleTypeKind.String).setFacets(
+              new Facets().setNullable(false).setMaxLength(100))
+              .setCustomizableFeedMappings(
+                  new CustomizableFeedMappings().setFcTargetPath(EdmTargetPath.SYNDICATION_TITLE)));
+          properties.add(new SimpleProperty().setName("Updated").setType(EdmSimpleTypeKind.DateTime)
+              .setFacets(new Facets().setNullable(false).setConcurrencyMode(EdmConcurrencyMode.Fixed))
+              .setCustomizableFeedMappings(
+                  new CustomizableFeedMappings().setFcTargetPath(EdmTargetPath.SYNDICATION_UPDATED)));
+
+          // Navigation Properties
+          List<NavigationProperty> navigationProperties = new ArrayList<NavigationProperty>();
+          navigationProperties.add(new NavigationProperty().setName("Products")
+              .setRelationship(ASSOCIATION_PRODUCT_CATEGORY).setFromRole(ROLE_3_1).setToRole(ROLE_1_3));
+
+          // Key
+          List<PropertyRef> keyProperties = new ArrayList<PropertyRef>();
+          keyProperties.add(new PropertyRef().setName("Id"));
+          Key key = new Key().setKeys(keyProperties);
+
+          return new EntityType().setName(ENTITY_TYPE_1_3.getName())
+              .setProperties(properties)
+              .setKey(key)
+              .setNavigationProperties(navigationProperties);
+
+        }    }
 
     return null;
   }
@@ -218,13 +256,20 @@ public class SpectreEdmProvider extends EdmProvider {
   @Override
   public Association getAssociation(final FullQualifiedName edmFQName) throws ODataException {
     if (NAMESPACE.equals(edmFQName.getNamespace())) {
-      if (ASSOCIATION_CAR_MANUFACTURER.getName().equals(edmFQName.getName())) {
-        return new Association().setName(ASSOCIATION_CAR_MANUFACTURER.getName())
+      if (ASSOCIATION_PRODUCT_SUPPLIER.getName().equals(edmFQName.getName())) {
+        return new Association().setName(ASSOCIATION_PRODUCT_SUPPLIER.getName())
             .setEnd1(
-                new AssociationEnd().setType(ENTITY_TYPE_1_1).setRole(ROLE_1_1).setMultiplicity(EdmMultiplicity.MANY))
+                new AssociationEnd().setType(ENTITY_TYPE_1_1).setRole(ROLE_1_2).setMultiplicity(EdmMultiplicity.MANY))
             .setEnd2(
-                new AssociationEnd().setType(ENTITY_TYPE_1_2).setRole(ROLE_1_2).setMultiplicity(EdmMultiplicity.ONE));
-      }
+                new AssociationEnd().setType(ENTITY_TYPE_1_2).setRole(ROLE_2_1).setMultiplicity(EdmMultiplicity.ONE));
+      } else if (ASSOCIATION_PRODUCT_CATEGORY.getName().equals(edmFQName.getName())) {
+        return new Association().setName(ASSOCIATION_PRODUCT_SUPPLIER.getName())
+	        .setEnd1(
+	            new AssociationEnd().setType(ENTITY_TYPE_1_1).setRole(ROLE_1_3).setMultiplicity(EdmMultiplicity.MANY))
+	        .setEnd2(
+	            new AssociationEnd().setType(ENTITY_TYPE_1_3).setRole(ROLE_3_1).setMultiplicity(EdmMultiplicity.ONE));
+	  }
+
     }
     return null;
   }
@@ -232,11 +277,13 @@ public class SpectreEdmProvider extends EdmProvider {
   @Override
   public EntitySet getEntitySet(final String entityContainer, final String name) throws ODataException {
     if (ENTITY_CONTAINER.equals(entityContainer)) {
-      if (ENTITY_SET_NAME_CARS.equals(name)) {
+      if (ENTITY_SET_NAME_PRODUCTS.equals(name)) {
         return new EntitySet().setName(name).setEntityType(ENTITY_TYPE_1_1);
-      } else if (ENTITY_SET_NAME_MANUFACTURERS.equals(name)) {
+      } else if (ENTITY_SET_NAME_SUPPLIERS.equals(name)) {
         return new EntitySet().setName(name).setEntityType(ENTITY_TYPE_1_2);
-      }
+      } else if (ENTITY_SET_NAME_CATEGORIES.equals(name)) {
+          return new EntitySet().setName(name).setEntityType(ENTITY_TYPE_1_3);
+        }
     }
     return null;
   }
@@ -245,12 +292,17 @@ public class SpectreEdmProvider extends EdmProvider {
   public AssociationSet getAssociationSet(final String entityContainer, final FullQualifiedName association,
       final String sourceEntitySetName, final String sourceEntitySetRole) throws ODataException {
     if (ENTITY_CONTAINER.equals(entityContainer)) {
-      if (ASSOCIATION_CAR_MANUFACTURER.equals(association)) {
+      if (ASSOCIATION_PRODUCT_SUPPLIER.equals(association)) {
         return new AssociationSet().setName(ASSOCIATION_SET)
-            .setAssociation(ASSOCIATION_CAR_MANUFACTURER)
-            .setEnd1(new AssociationSetEnd().setRole(ROLE_1_2).setEntitySet(ENTITY_SET_NAME_MANUFACTURERS))
-            .setEnd2(new AssociationSetEnd().setRole(ROLE_1_1).setEntitySet(ENTITY_SET_NAME_CARS));
-      }
+            .setAssociation(ASSOCIATION_PRODUCT_SUPPLIER)
+            .setEnd1(new AssociationSetEnd().setRole(ROLE_2_1).setEntitySet(ENTITY_SET_NAME_SUPPLIERS))
+            .setEnd2(new AssociationSetEnd().setRole(ROLE_1_2).setEntitySet(ENTITY_SET_NAME_PRODUCTS));
+      } else if (ASSOCIATION_PRODUCT_CATEGORY.equals(association)) {
+          return new AssociationSet().setName(ASSOCIATION_SET)
+              .setAssociation(ASSOCIATION_PRODUCT_CATEGORY)
+              .setEnd1(new AssociationSetEnd().setRole(ROLE_3_1).setEntitySet(ENTITY_SET_NAME_CATEGORIES))
+              .setEnd2(new AssociationSetEnd().setRole(ROLE_1_3).setEntitySet(ENTITY_SET_NAME_PRODUCTS));
+        } 
     }
     return null;
   }

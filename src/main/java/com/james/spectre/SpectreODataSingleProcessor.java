@@ -18,8 +18,9 @@
  ******************************************************************************/
 package com.james.spectre;
 
-import static com.james.spectre.SpectreEdmProvider.ENTITY_SET_NAME_CARS;
-import static com.james.spectre.SpectreEdmProvider.ENTITY_SET_NAME_MANUFACTURERS;
+import static com.james.spectre.SpectreEdmProvider.ENTITY_SET_NAME_PRODUCTS;
+import static com.james.spectre.SpectreEdmProvider.ENTITY_SET_NAME_SUPPLIERS;
+import static com.james.spectre.SpectreEdmProvider.ENTITY_SET_NAME_CATEGORIES;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -59,12 +60,15 @@ public class SpectreODataSingleProcessor extends ODataSingleProcessor {
     if (uriInfo.getNavigationSegments().size() == 0) {
       entitySet = uriInfo.getStartEntitySet();
 
-      if (ENTITY_SET_NAME_CARS.equals(entitySet.getName())) {
+      if (ENTITY_SET_NAME_PRODUCTS.equals(entitySet.getName())) {
         return EntityProvider.writeFeed(contentType, entitySet, dataStore.getProducts(),
             EntityProviderWriteProperties.serviceRoot(getContext().getPathInfo().getServiceRoot()).build());
-      } else if (ENTITY_SET_NAME_MANUFACTURERS.equals(entitySet.getName())) {
+      } else if (ENTITY_SET_NAME_SUPPLIERS.equals(entitySet.getName())) {
         return EntityProvider.writeFeed(contentType, entitySet, dataStore.getSuppliers(),
             EntityProviderWriteProperties.serviceRoot(getContext().getPathInfo().getServiceRoot()).build());
+      } else if (ENTITY_SET_NAME_CATEGORIES.equals(entitySet.getName())) {
+          return EntityProvider.writeFeed(contentType, entitySet, dataStore.getCategories(),
+              EntityProviderWriteProperties.serviceRoot(getContext().getPathInfo().getServiceRoot()).build());
       }
 
       throw new ODataNotFoundException(ODataNotFoundException.ENTITY);
@@ -73,7 +77,7 @@ public class SpectreODataSingleProcessor extends ODataSingleProcessor {
       // navigation first level, simplified example for illustration purposes only
       entitySet = uriInfo.getTargetEntitySet();
 
-      if (ENTITY_SET_NAME_CARS.equals(entitySet.getName())) {
+      if (ENTITY_SET_NAME_PRODUCTS.equals(entitySet.getName())) {
         int supplierKey = getKeyValue(uriInfo.getKeyPredicates().get(0));
 
         List<Map<String, Object>> products = new ArrayList<Map<String, Object>>();
@@ -95,7 +99,7 @@ public class SpectreODataSingleProcessor extends ODataSingleProcessor {
     if (uriInfo.getNavigationSegments().size() == 0) {
       EdmEntitySet entitySet = uriInfo.getStartEntitySet();
 
-      if (ENTITY_SET_NAME_CARS.equals(entitySet.getName())) {
+      if (ENTITY_SET_NAME_PRODUCTS.equals(entitySet.getName())) {
         int id = getKeyValue(uriInfo.getKeyPredicates().get(0));
         Map<String, Object> data = dataStore.getProduct(id);
 
@@ -106,7 +110,7 @@ public class SpectreODataSingleProcessor extends ODataSingleProcessor {
 
           return EntityProvider.writeEntry(contentType, entitySet, data, propertiesBuilder.build());
         }
-      } else if (ENTITY_SET_NAME_MANUFACTURERS.equals(entitySet.getName())) {
+      } else if (ENTITY_SET_NAME_SUPPLIERS.equals(entitySet.getName())) {
         int id = getKeyValue(uriInfo.getKeyPredicates().get(0));
         Map<String, Object> data = dataStore.getSupplier(id);
 
@@ -117,7 +121,18 @@ public class SpectreODataSingleProcessor extends ODataSingleProcessor {
 
           return EntityProvider.writeEntry(contentType, entitySet, data, propertiesBuilder.build());
         }
-      }
+      } else if (ENTITY_SET_NAME_CATEGORIES.equals(entitySet.getName())) {
+          int id = getKeyValue(uriInfo.getKeyPredicates().get(0));
+          Map<String, Object> data = dataStore.getCategory(id);
+
+          if (data != null) {
+            URI serviceRoot = getContext().getPathInfo().getServiceRoot();
+            ODataEntityProviderPropertiesBuilder propertiesBuilder =
+                EntityProviderWriteProperties.serviceRoot(serviceRoot);
+
+            return EntityProvider.writeEntry(contentType, entitySet, data, propertiesBuilder.build());
+          }
+        }
 
       throw new ODataNotFoundException(ODataNotFoundException.ENTITY);
 
@@ -127,9 +142,12 @@ public class SpectreODataSingleProcessor extends ODataSingleProcessor {
 
       Map<String, Object> data = null;
 
-      if (ENTITY_SET_NAME_MANUFACTURERS.equals(entitySet.getName())) {
+      if (ENTITY_SET_NAME_SUPPLIERS.equals(entitySet.getName())) {
         int productKey = getKeyValue(uriInfo.getKeyPredicates().get(0));
         data = dataStore.getSupplierFor(productKey);
+      } else if (ENTITY_SET_NAME_CATEGORIES.equals(entitySet.getName())) {
+          int productKey = getKeyValue(uriInfo.getKeyPredicates().get(0));
+          data = dataStore.getCategoryFor(productKey);
       }
 
       if (data != null) {

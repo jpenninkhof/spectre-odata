@@ -34,51 +34,36 @@ public class SpectreDataStore {
     Calendar updated = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 
     switch (id) {
-    case 1:
-      updated.set(2012, 11, 11, 11, 11, 11);
-      data = createProduct(1, "F1 W03", 1, 189189.43, "EUR", "2012", updated, "file://imagePath/w03");
-      break;
-
-    case 2:
-      updated.set(2013, 11, 11, 11, 11, 11);
-      data = createProduct(2, "F1 W04", 1, 199999.99, "EUR", "2013", updated, "file://imagePath/w04");
-      break;
-
-    case 3:
-      updated.set(2012, 12, 12, 12, 12, 12);
-      data = createProduct(3, "F2012", 2, 137285.33, "EUR", "2012", updated, "http://pathToImage/f2012");
-      break;
-
-    case 4:
-      updated.set(2013, 12, 12, 12, 12, 12);
-      data = createProduct(4, "F2013", 2, 145285.00, "EUR", "2013", updated, "http://pathToImage/f2013");
-      break;
-
-    case 5:
-      updated.set(2011, 11, 11, 11, 11, 11);
-      data = createProduct(5, "F1 W02", 1, 167189.00, "EUR", "2011", updated, "file://imagePath/wXX");
-      break;
-
-    default:
-      break;
+    case 1: updated.set(2015, 11, 9); data = createProduct(1, "Golf", 1, 2, 0, 0, 3, 0, updated); break;
+    case 2: updated.set(2015, 11, 9); data = createProduct(2, "Passat", 1, 3, 0, 0, 2, 0, updated); break;
+    case 3: updated.set(2015, 11, 9); data = createProduct(3, "Polo", 1, 1, 0, 0, 4, 0, updated); break;
+    case 4: updated.set(2015, 11, 9); data = createProduct(4, "Up", 1, 1, 0, 0, 5, 0, updated); break;
+    case 5: updated.set(2015, 11, 9); data = createProduct(5, "Phaeton", 1, 4, 0, 0, 1, 0, updated); break;
+    case 6: updated.set(2015, 11, 9); data = createProduct(6, "Leon", 2, 2, 0, 0, 4, 0, updated); break;
+    case 7: updated.set(2015, 11, 9); data = createProduct(7, "Octavia", 3, 2, 0, 0, 4, 0, updated); break;
+    case 8: updated.set(2015, 11, 9); data = createProduct(8, "Punto", 4, 2, 0, 0, 4, 0, updated); break;
+    case 9: updated.set(2015, 11, 9); data = createProduct(9, "Punto", 5, 1, 0, 0, 2, 0, updated); break;
+    default: break;
     }
 
     return data;
   }
 
-  private Map<String, Object> createProduct(final int productId, final String model, final int supplierId,
-      final double price,
-      final String currency, final String modelYear, final Calendar updated, final String imagePath) {
+  private Map<String, Object> createProduct(
+	  final int productId, final String name, final int supplierId, final int categoryId,
+      final int productionUsage, int consumptionUsage, int productionRating, int consumptionRating, 
+      final Calendar updated) {
     Map<String, Object> data = new HashMap<String, Object>();
 
     data.put("Id", productId);
-    data.put("Model", model);
+    data.put("Name", name);
     data.put("SupplierId", supplierId);
-    data.put("Price", price);
-    data.put("Currency", currency);
-    data.put("ModelYear", modelYear);
+    data.put("CategoryId", categoryId);
+    data.put("ProductionUsage", productionUsage);
+    data.put("ConsumptionUsage", consumptionUsage);
+    data.put("ProductionRating", productionRating);
+    data.put("ConsumptionRating", consumptionRating);
     data.put("Updated", updated);
-    data.put("ImagePath", imagePath);
 
     return data;
   }
@@ -86,24 +71,30 @@ public class SpectreDataStore {
   public Map<String, Object> getSupplier(final int id) {
     Map<String, Object> data = null;
     Calendar date = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-
     switch (id) {
-    case 1:
-      Map<String, Object> addressStar = createAddress("Star Street 137", "Stuttgart", "70173", "Germany");
-      date.set(1954, 7, 4);
-      data = createSupplier(1, "Star Powered Racing", addressStar, date);
-      break;
-
-    case 2:
-      Map<String, Object> addressHorse = createAddress("Horse Street 1", "Maranello", "41053", "Italy");
-      date.set(1929, 11, 16);
-      data = createSupplier(2, "Horse Powered Racing", addressHorse, date);
-      break;
-
+      case 1: date.set(2015, 11, 9); data = createSupplier(1, "Volkswagen", createAddress("Star Street 137", "Stuttgart", "70173", "Germany"), date); break;
+      case 2: date.set(2015, 11, 9); data = createSupplier(2, "Seat", createAddress("Horse Street 1", "Maranello", "41053", "Italy"), date); break;
+      case 3: date.set(2015, 11, 9); data = createSupplier(3, "Skoda", createAddress("Downing Street 5", "London", "373823", "United Kingdom"), date); break;
+      case 4: date.set(2015, 11, 9); data = createSupplier(4, "Fiat", createAddress("Strada Grande 10", "Milano", "18927", "Italy"), date); break;
+      case 5: date.set(2015, 11, 9); data = createSupplier(4, "Toyota", createAddress("Ninja Sushi 10", "Tokyo", "182398", "Jappan"), date); break;
     default:
       break;
     }
+    return data;
+  }
 
+
+  public Map<String, Object> getCategory(final int id) {
+    Map<String, Object> data = null;
+    Calendar date = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+    switch (id) {
+	  case 1: date.set(2015, 11, 9); data = createCategory(1, "Cars - Class A", date); break;
+	  case 2: date.set(2015, 11, 9); data = createCategory(2, "Cars - Class B", date); break;
+	  case 3: date.set(2015, 11, 9); data = createCategory(3, "Cars - Class C", date); break;
+	  case 4: date.set(2015, 11, 9); data = createCategory(4, "Cars - Class D", date); break;
+    default:
+      break;
+    }
     return data;
   }
 
@@ -113,6 +104,15 @@ public class SpectreDataStore {
     data.put("Id", id);
     data.put("Name", name);
     data.put("Address", address);
+    data.put("Updated", updated);
+    return data;
+  }
+
+  private Map<String, Object> createCategory(final int id, final String name, 
+      final Calendar updated) {
+    Map<String, Object> data = new HashMap<String, Object>();
+    data.put("Id", id);
+    data.put("Name", name);
     data.put("Updated", updated);
     return data;
   }
@@ -134,6 +134,9 @@ public class SpectreDataStore {
     products.add(getProduct(3));
     products.add(getProduct(4));
     products.add(getProduct(5));
+    products.add(getProduct(6));
+    products.add(getProduct(7));
+    products.add(getProduct(8));
     return products;
   }
 
@@ -141,8 +144,20 @@ public class SpectreDataStore {
     List<Map<String, Object>> suppliers = new ArrayList<Map<String, Object>>();
     suppliers.add(getSupplier(1));
     suppliers.add(getSupplier(2));
+    suppliers.add(getSupplier(3));
+    suppliers.add(getSupplier(4));
+    suppliers.add(getSupplier(5));
     return suppliers;
   }
+
+  public List<Map<String, Object>> getCategories() {
+	    List<Map<String, Object>> categories = new ArrayList<Map<String, Object>>();
+	    categories.add(getCategory(1));
+	    categories.add(getCategory(2));
+	    categories.add(getCategory(3));
+	    categories.add(getCategory(4));
+	    return categories;
+	  }
 
   public List<Map<String, Object>> getProductsFor(final int supplierId) {
     List<Map<String, Object>> products = getProducts();
@@ -167,4 +182,17 @@ public class SpectreDataStore {
     }
     return null;
   }
+  
+
+  public Map<String, Object> getCategoryFor(final int productId) {
+    Map<String, Object> product = getProduct(productId);
+    if (product != null) {
+      Object categoryId = product.get("CategoryId");
+      if (categoryId != null) {
+        return getCategory((Integer) categoryId);
+      }
+    }
+    return null;
+  }
+    
 }

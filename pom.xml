@@ -21,6 +21,8 @@
 		<version.cxf>2.7.6</version.cxf>
 		<version.slf4j>1.7.1</version.slf4j>
 		<version.olingo>2.0.5</version.olingo>
+		<sap.cloud.sdk.version>2.33.10</sap.cloud.sdk.version>
+		<sap.cloud.sdk.path>/Users/jpenninkhof/SDK/neo-java-web-sdk-2.33.10</sap.cloud.sdk.path>
 	</properties>
 
 	<build>
@@ -87,15 +89,11 @@
 			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
 			<version>${version.cxf}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${version.slf4j}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${version.slf4j}</version>
-		</dependency>
+        <dependency>
+            <groupId>com.sap.cloud</groupId>
+            <artifactId>neo-java-web-api</artifactId>
+            <version>${sap.cloud.sdk.version}</version>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
 </project>
