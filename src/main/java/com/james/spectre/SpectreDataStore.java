@@ -34,15 +34,17 @@ public class SpectreDataStore {
     Calendar updated = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 
     switch (id) {
-    case 1: updated.set(2015, 11, 9); data = createProduct(1, "Golf", 1, 2, 0, 0, 3, 0, updated); break;
-    case 2: updated.set(2015, 11, 9); data = createProduct(2, "Passat", 1, 3, 0, 0, 2, 0, updated); break;
-    case 3: updated.set(2015, 11, 9); data = createProduct(3, "Polo", 1, 1, 0, 0, 4, 0, updated); break;
-    case 4: updated.set(2015, 11, 9); data = createProduct(4, "Up", 1, 1, 0, 0, 5, 0, updated); break;
-    case 5: updated.set(2015, 11, 9); data = createProduct(5, "Phaeton", 1, 4, 0, 0, 1, 0, updated); break;
-    case 6: updated.set(2015, 11, 9); data = createProduct(6, "Leon", 2, 2, 0, 0, 4, 0, updated); break;
-    case 7: updated.set(2015, 11, 9); data = createProduct(7, "Octavia", 3, 2, 0, 0, 4, 0, updated); break;
-    case 8: updated.set(2015, 11, 9); data = createProduct(8, "Punto", 4, 2, 0, 0, 4, 0, updated); break;
-    case 9: updated.set(2015, 11, 9); data = createProduct(9, "Aygo", 5, 1, 0, 0, 2, 0, updated); break;
+    case 1: updated.set(2015, 11, 9); data = createProduct(1, "Golf", 1, 2, 14000, 50000, 3, 3, updated); break;
+    case 2: updated.set(2015, 11, 9); data = createProduct(2, "Golf GTE", 1, 2, 21000, 30000, 2, 5, updated); break;
+    case 3: updated.set(2015, 11, 9); data = createProduct(3, "Passat", 1, 3, 17000, 60000, 2, 2, updated); break;
+    case 4: updated.set(2015, 11, 9); data = createProduct(4, "Passat GTE", 1, 3, 23000, 35000, 1, 5, updated); break;
+    case 5: updated.set(2015, 11, 9); data = createProduct(5, "Polo", 1, 1, 12000, 45000, 4, 3, updated); break;
+    case 6: updated.set(2015, 11, 9); data = createProduct(6, "Up", 1, 1, 10000, 40000, 5, 4, updated); break;
+    case 7: updated.set(2015, 11, 9); data = createProduct(7, "Phaeton", 1, 4, 22000, 70000, 1, 2, updated); break;
+    case 8: updated.set(2015, 11, 9); data = createProduct(8, "Leon", 2, 2, 13000, 50000, 4, 3, updated); break;
+    case 9: updated.set(2015, 11, 9); data = createProduct(9, "Octavia", 3, 2, 13000, 50000, 4, 3, updated); break;
+    case 10: updated.set(2015, 11, 9); data = createProduct(10, "Punto", 4, 2, 10000, 40000, 4, 4, updated); break;
+    case 11: updated.set(2015, 11, 9); data = createProduct(11, "Aygo", 5, 1, 9000, 35000, 2, 4, updated); break;
     default: break;
     }
 
