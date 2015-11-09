@@ -42,7 +42,7 @@ public class SpectreDataStore {
     case 6: updated.set(2015, 11, 9); data = createProduct(6, "Leon", 2, 2, 0, 0, 4, 0, updated); break;
     case 7: updated.set(2015, 11, 9); data = createProduct(7, "Octavia", 3, 2, 0, 0, 4, 0, updated); break;
     case 8: updated.set(2015, 11, 9); data = createProduct(8, "Punto", 4, 2, 0, 0, 4, 0, updated); break;
-    case 9: updated.set(2015, 11, 9); data = createProduct(9, "Punto", 5, 1, 0, 0, 2, 0, updated); break;
+    case 9: updated.set(2015, 11, 9); data = createProduct(9, "Aygo", 5, 1, 0, 0, 2, 0, updated); break;
     default: break;
     }
 
@@ -137,6 +137,7 @@ public class SpectreDataStore {
     products.add(getProduct(6));
     products.add(getProduct(7));
     products.add(getProduct(8));
+    products.add(getProduct(9));
     return products;
   }
 
